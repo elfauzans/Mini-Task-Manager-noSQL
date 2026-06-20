@@ -1,0 +1,26 @@
+[
+  {
+    "id": "518c2af8-6109-4a5c-9175-515907299874",
+    "taskId": "78e4e7d4-7e0c-46ad-a22b-edce24737e6f",
+    "actor": "john.doe",
+    "fromStatus": "to_do",
+    "toStatus": "pending",
+    "createdAt": "2026-06-20T16:33:00.829Z"
+  },
+  {
+    "id": "a690c9ff-3590-4dcc-9270-efd94f236b05",
+    "taskId": "78e4e7d4-7e0c-46ad-a22b-edce24737e6f",
+    "actor": "john.doe",
+    "fromStatus": "pending",
+    "toStatus": "in_progress",
+    "createdAt": "2026-06-20T16:33:04.343Z"
+  },
+  {
+    "id": "f98b2d78-607b-47e6-9dab-d0bd6e8e212c",
+    "taskId": "78e4e7d4-7e0c-46ad-a22b-edce24737e6f",
+    "actor": "john.doe",
+    "fromStatus": "in_progress",
+    "toStatus": "done",
+    "createdAt": "2026-06-20T16:33:09.093Z"
+  }
+]
