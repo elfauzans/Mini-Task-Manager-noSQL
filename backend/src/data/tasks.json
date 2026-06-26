@@ -9,7 +9,8 @@
   {
     "id": "6e389c49-f4c3-4865-9013-5dcd0048d63e",
     "title": "test",
-    "status": "to_do",
-    "createdAt": "2026-06-20T16:34:24.296Z"
+    "status": "done",
+    "createdAt": "2026-06-20T16:34:24.296Z",
+    "deletedAt": "2026-06-21T10:06:24.400Z"
   }
 ]

@@ -155,7 +155,7 @@ function App() {
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: 20 }}>
-      <h1>Qonflo Task Manager</h1>
+      <h1>Test Task Manager</h1>
 
       <div style={{ display: "flex", gap: 8, marginBottom: 24, borderBottom: "1px solid #444" }}>
         <button style={tabStyle("list")} onClick={() => setActiveTab("list")}>

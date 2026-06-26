@@ -22,5 +22,29 @@
     "fromStatus": "in_progress",
     "toStatus": "done",
     "createdAt": "2026-06-20T16:33:09.093Z"
+  },
+  {
+    "id": "ff6cd173-d96a-426f-ac21-15a90a7f90af",
+    "taskId": "6e389c49-f4c3-4865-9013-5dcd0048d63e",
+    "actor": "john.doe",
+    "fromStatus": "to_do",
+    "toStatus": "pending",
+    "createdAt": "2026-06-21T10:06:03.945Z"
+  },
+  {
+    "id": "6d22bb39-285b-4bba-9b71-b45b4069871b",
+    "taskId": "6e389c49-f4c3-4865-9013-5dcd0048d63e",
+    "actor": "john.doe",
+    "fromStatus": "pending",
+    "toStatus": "in_progress",
+    "createdAt": "2026-06-21T10:06:09.565Z"
+  },
+  {
+    "id": "68240c17-a016-41f4-9cad-8364ad7e251d",
+    "taskId": "6e389c49-f4c3-4865-9013-5dcd0048d63e",
+    "actor": "john.doe",
+    "fromStatus": "in_progress",
+    "toStatus": "done",
+    "createdAt": "2026-06-21T10:06:10.579Z"
   }
 ]
