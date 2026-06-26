@@ -1,282 +1,231 @@
-# Qonflo Mini Task Manager
+# Mini Task Manager
 
-Aplikasi manajemen tugas sederhana yang dibuat sebagai take-home assessment untuk posisi Full Stack Developer di Qonflo.
+A simple full-stack task management application built with **React**, **Node.js**, **Express**, and **TypeScript**.
 
-## Teknologi yang Digunakan
+The application demonstrates clean architecture, RESTful API design, task lifecycle management, and immutable audit logging. Data is stored in JSON files to keep the project lightweight and easy to run without requiring a database.
 
-### Frontend
+---
+
+# Features
+
+## Task Management
+
+* Create a task
+* View all tasks
+* Update task status
+* Delete a task
+
+## Task Status Workflow
+
+Each task must follow the predefined workflow:
+
+```
+to_do → pending → in_progress → done
+```
+
+Invalid status transitions are rejected by the server to ensure data consistency.
+
+## Audit Log
+
+Every successful status update creates a new audit log containing:
+
+* Task ID
+* Actor
+* Previous status
+* New status
+* Timestamp
+
+Audit logs are stored separately and displayed in chronological order.
+
+## Idempotent Status Update
+
+Updating a task with the same status does not create duplicate audit logs.
+
+---
+
+# Tech Stack
+
+## Frontend
 
 * React
 * TypeScript
-* Axios
 * Vite
+* Axios
 
-### Backend
+## Backend
 
 * Node.js
 * Express
 * TypeScript
 
-### Penyimpanan Data
+## Data Storage
 
-* JSON File (`tasks.json` dan `audit-logs.json`)
-
----
-
-# Fitur
-
-## Manajemen Task
-
-* Membuat task
-* Melihat daftar task
-* Menghapus task
-* Mengubah status task
-
-## Validasi Status
-
-Perubahan status hanya dapat mengikuti alur berikut:
-
-to_do → pending → in_progress → done
-
-Apabila user mencoba melakukan perubahan status yang tidak sesuai alur, sistem akan menolak permintaan tersebut.
-
-## Audit Log
-
-Setiap perubahan status akan menghasilkan audit log baru yang berisi:
-
-* Task yang diubah
-* Actor yang melakukan perubahan
-* Status sebelumnya
-* Status setelah perubahan
-* Waktu perubahan
-
-Audit log ditampilkan secara kronologis.
-
-## Idempotent Update
-
-Apabila status yang dikirim sama dengan status saat ini, sistem tidak akan membuat audit log baru.
+* JSON Files
 
 ---
 
-# Arsitektur Aplikasi
+# Project Structure
 
 ## Backend
 
-Backend menggunakan pendekatan layer sederhana:
+The backend follows a simple layered architecture.
+
+```
+src
+├── controllers
+├── routes
+├── services
+├── persistence
+├── models
+└── app.ts
+```
+
+### Layers
 
 ### Route Layer
 
-Bertugas mendefinisikan endpoint API.
+Defines REST API endpoints.
 
 ### Controller Layer
 
-Bertugas menerima request dan mengirim response.
+Handles HTTP requests and responses.
 
 ### Service Layer
 
-Berisi business logic aplikasi seperti:
+Contains business logic including:
 
-* Membuat task
-* Mengubah status task
-* Validasi alur status
-* Membuat audit log
+* Task creation
+* Status transition validation
+* Audit log generation
+* Idempotent update handling
 
 ### Persistence Layer
 
-Menyimpan data ke file JSON.
+Handles reading and writing data to JSON files.
 
 ---
 
 ## Frontend
 
-Frontend menggunakan React dan TypeScript.
+The frontend is organized into:
 
-Komponen utama:
+```
+src
+├── api
+├── components
+├── pages
+├── types
+└── App.tsx
+```
 
-### UI Layer
+Responsibilities include:
 
-Menampilkan data task dan audit log.
+* Fetching data from the backend
+* Displaying tasks
+* Updating task status
+* Viewing audit history
 
-### API Layer
-
-Mengelola komunikasi ke backend menggunakan Axios.
-
-### State Management
-
-Menggunakan React Hooks (`useState` dan `useEffect`).
+State management is implemented using React Hooks (`useState` and `useEffect`).
 
 ---
 
-# Cara Menjalankan Aplikasi
+# API Endpoints
+
+| Method | Endpoint                | Description               |
+| ------ | ----------------------- | ------------------------- |
+| GET    | `/tasks`                | Get all tasks             |
+| POST   | `/tasks`                | Create a new task         |
+| PATCH  | `/tasks/:id/status`     | Update task status        |
+| DELETE | `/tasks/:id`            | Delete a task             |
+| GET    | `/tasks/:id/audit-logs` | Get audit logs for a task |
+
+---
+
+# Running the Project
 
 ## Backend
 
 ```bash
 cd backend
-
 npm install
-
 npm run dev
 ```
 
-Backend berjalan pada:
+Runs on:
 
-```text
+```
 http://localhost:3001
 ```
+
+---
 
 ## Frontend
 
 ```bash
 cd frontend
-
 npm install
-
 npm run dev
 ```
 
-Frontend berjalan pada:
+Runs on:
 
-```text
+```
 http://localhost:5173
 ```
 
 ---
 
-# Endpoint API
+# Design Decisions
 
-## Mendapatkan Semua Task
+This project uses JSON files instead of a database to keep the setup simple and dependency-free.
 
-```http
-GET /tasks
-```
+The business logic is separated from the persistence layer, making it easier to migrate to a relational or NoSQL database in the future.
 
-## Membuat Task
-
-```http
-POST /tasks
-```
-
-Body:
-
-```json
-{
-  "title": "Prepare Invoice"
-}
-```
-
-## Mengubah Status Task
-
-```http
-PATCH /tasks/:id/status
-```
-
-Body:
-
-```json
-{
-  "status": "pending",
-  "actor": "john.doe"
-}
-```
-
-## Menghapus Task
-
-```http
-DELETE /tasks/:id
-```
-
-## Mendapatkan Audit Log
-
-```http
-GET /tasks/:id/audit-logs
-```
+Audit logs are designed as append-only records and cannot be modified through the API, preserving the integrity of task history.
 
 ---
 
-# Asumsi yang Diambil
+# Current Limitations
 
-* Sistem tidak memerlukan autentikasi.
-* Actor menggunakan daftar user yang sudah ditentukan (hardcoded).
-* Penyimpanan menggunakan file JSON karena diperbolehkan dalam soal.
-* Audit log bersifat append-only.
-* Hanya perubahan status yang dicatat ke audit log.
-
----
-
-# Trade-off yang Dibuat
-
-Saya memilih menggunakan file JSON dibanding database karena:
-
-* Requirement memperbolehkan penggunaan file JSON.
-* Implementasi menjadi lebih sederhana.
-* Fokus pengerjaan dapat diarahkan ke business logic dan audit trail.
-* Waktu pengerjaan lebih sesuai dengan estimasi 3–5 jam.
-
-Kekurangannya adalah file JSON tidak cocok digunakan untuk banyak pengguna secara bersamaan.
+* JSON file storage is not suitable for concurrent users.
+* No authentication or authorization.
+* No database transactions.
+* No pagination or search functionality.
 
 ---
 
-# Bagaimana Saya Memastikan Audit Log Tidak Dimodifikasi?
+# Possible Improvements
 
-Audit log disimpan secara terpisah dari data task.
+Future enhancements may include:
 
-Sistem hanya menambahkan (append) audit log baru ketika terjadi perubahan status.
-
-Tidak tersedia endpoint untuk mengubah ataupun menghapus audit log.
-
-Ketika task dihapus, audit log tetap disimpan sehingga histori perubahan tetap tersedia.
-
-Dengan pendekatan tersebut audit log bersifat immutable (tidak dapat diubah).
-
----
-
-# Bagian Mana yang Paling Berisiko Jika Digunakan Banyak Pengguna?
-
-Risiko terbesar berada pada mekanisme penyimpanan file JSON.
-
-Apabila banyak pengguna melakukan update secara bersamaan, dapat terjadi race condition yang menyebabkan data tidak konsisten.
-
-Pada sistem produksi, database seperti PostgreSQL atau MongoDB akan lebih tepat digunakan.
+* PostgreSQL or MongoDB integration
+* JWT authentication
+* Unit and integration testing
+* Docker support
+* Request validation using Zod
+* Search, filtering, and sorting
+* Pagination
+* Better UI/UX
+* Structured application logging
+* CI/CD pipeline with GitHub Actions
 
 ---
 
-# Jika Sistem Ini Berkembang Menjadi Lebih Besar, Bagian Mana yang Akan Direfactor Terlebih Dahulu?
+# Learning Objectives
 
-Bagian pertama yang akan saya refactor adalah persistence layer (penyimpanan data).
+This project was created to practice:
 
-File JSON akan diganti dengan database agar mendapatkan:
-
-* Dukungan transaksi
-* Concurrency handling
-* Query yang lebih cepat
-* Indexing
-* Skalabilitas yang lebih baik
-
-Karena business logic sudah dipisahkan ke service layer, proses migrasi ke database akan lebih mudah dilakukan.
-
----
-
-# Jika Memiliki Waktu Lebih
-
-Beberapa peningkatan yang akan saya lakukan:
-
-* Menambahkan unit test dan integration test
-* Menggunakan database
-* Menambahkan Docker
-* Menambahkan validasi menggunakan Zod
-* Menambahkan pencarian dan filter task
-* Meningkatkan tampilan UI/UX
-* Menambahkan logging yang lebih terstruktur
+* REST API development
+* Layered architecture
+* TypeScript
+* React frontend development
+* Business rule validation
+* Audit logging
+* Clean project structure
+* Separation of concerns
 
 ---
 
-# Penggunaan AI
+# License
 
-AI digunakan untuk membantu:
-
-* Pembuatan boilerplate code
-* Validasi pendekatan arsitektur
-* Referensi implementasi React dan TypeScript
-
-Seluruh kode yang dihasilkan tetap ditinjau kembali, dipahami, dan divalidasi melalui pengujian endpoint serta pengujian fitur aplikasi secara manual.
+This project is available under the MIT License.
